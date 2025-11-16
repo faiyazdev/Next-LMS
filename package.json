@@ -1,14 +1,12 @@
 {
-  "name": "devevents",
+  "name": "next-course",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "generate": "npx drizzle-kit generate",
-    "migrate": "npx drizzle-kit migrate"
+    "lint": "eslint"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
