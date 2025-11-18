@@ -9,25 +9,22 @@ export const UserRoleEnum = pgEnum("user_role", userRoles);
 
 export const UserTable = pgTable("users", {
   id,
-  clerkUserId: text("clerk_user_id")
-    .notNull()
-    .unique(),
+  clerkUserId: text("clerk_user_id").notNull().unique(),
 
   name: varchar("name", { length: 255 }),
 
-  email: varchar("email", { length: 255 })
-    .notNull(),
+  email: varchar("email", { length: 255 }).notNull(),
 
   imageUrl: text("image_url"),
 
-  role: UserRoleEnum("role")
-    .notNull()
-    .default("user"),
+  role: UserRoleEnum("role").notNull().default("user"),
 
   createdAt,
   updatedAt,
   deletedAt,
 });
+
+export type UserTable = typeof UserTable.$inferInsert;
 export const UserRelationships = relations(UserTable, ({ many }) => ({
   userCourseAccesses: many(UserCourseAccessTable),
 }));
