@@ -8,7 +8,14 @@ export async function insertUser(data: UserTable) {
     .values(data)
     .onConflictDoUpdate({
       target: UserTable.clerkUserId,
-      set: data,
+      set: {
+        email: data.email,
+        id: data.id,
+        clerkUserId: data.clerkUserId,
+        name: data.name,
+        role: "user",
+        imageUrl: data.imageUrl,
+      },
     })
     .returning();
 
@@ -21,7 +28,12 @@ export async function updateUser(
 ) {
   const [updatedUser] = await db
     .update(UserTable)
-    .set(data)
+    .set({
+      email: data.email,
+      name: data.name,
+      imageUrl: data.imageUrl,
+      role: data.role,
+    })
     .where(eq(UserTable.clerkUserId, clerkUserId))
     .returning();
 
@@ -32,7 +44,11 @@ export async function deleteUser({ clerkUserId }: { clerkUserId: string }) {
   return await db
     .update(UserTable)
     .set({
-      clerkUserId,
+      email: "deleted@email.com",
+      clerkUserId: `deleted-clerkUserId-${clerkUserId}`,
+      name: "deleted name",
+      imageUrl: "delted image path",
+      deletedAt: new Date(),
     })
     .where(eq(UserTable.clerkUserId, clerkUserId))
     .returning();

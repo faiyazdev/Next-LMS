@@ -1,8 +1,7 @@
 import { UserTable } from "@/drizzle/schema";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 
-const client = await clerkClient();
-export const syncClerkUserMetadata = (
+export const syncClerkUserMetadata = async (
   {
     clerkUserId,
   }: {
@@ -10,12 +9,17 @@ export const syncClerkUserMetadata = (
   },
   user: UserTable
 ) => {
-  return client.users.updateUserMetadata(clerkUserId, {
-    publicMetadata: {
-      dbId: user.id,
-      role: user.role,
-    },
-  });
+  try {
+    const client = await clerkClient();
+    return client.users.updateUserMetadata(clerkUserId, {
+      publicMetadata: {
+        dbId: user.id,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export async function getCurrentUser() {
