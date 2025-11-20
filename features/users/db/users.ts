@@ -1,6 +1,7 @@
 import { db } from "@/drizzle";
 import { UserTable } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
+import { revalidateUserCacheTag } from "./cache";
 
 export async function insertUser(data: UserTable) {
   const [newUser] = await db
@@ -19,6 +20,8 @@ export async function insertUser(data: UserTable) {
     })
     .returning();
 
+  revalidateUserCacheTag(newUser.id);
+
   return newUser;
 }
 
@@ -36,12 +39,13 @@ export async function updateUser(
     })
     .where(eq(UserTable.clerkUserId, clerkUserId))
     .returning();
+  revalidateUserCacheTag(updatedUser.id);
 
   return updatedUser;
 }
 
 export async function deleteUser({ clerkUserId }: { clerkUserId: string }) {
-  return await db
+  const [deletedUser] = await db
     .update(UserTable)
     .set({
       email: "deleted@email.com",
@@ -52,4 +56,7 @@ export async function deleteUser({ clerkUserId }: { clerkUserId: string }) {
     })
     .where(eq(UserTable.clerkUserId, clerkUserId))
     .returning();
+
+  revalidateUserCacheTag(deletedUser.id);
+  return deletedUser;
 }

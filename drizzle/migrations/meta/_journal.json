@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1763341765820,
-      "tag": "0000_spotty_big_bertha",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1763341982636,
-      "tag": "0001_overconfident_flatman",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1763342279497,
-      "tag": "0002_classy_the_hunter",
+      "when": 1763531189035,
+      "tag": "0000_petite_blob",
       "breakpoints": true
     }
   ]

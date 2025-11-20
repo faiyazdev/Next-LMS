@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { dark } from "@clerk/themes";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,20 +26,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="">
-      <ClerkProvider
-        appearance={{
-          theme: dark,
-        }}
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <html lang="en">
-          <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-          >
-            {children}
-          </body>
-        </html>
-      </ClerkProvider>
-    </div>
+        <ClerkProvider
+          appearance={{
+            theme: dark,
+          }}
+        >
+          <main>{children}</main>
+          <Toaster />
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }

@@ -26,7 +26,7 @@ export default function AdminNavbar() {
         <h1 className="text-2xl font-bold">Next LMS</h1>
 
         {/* Desktop Menu */}
-        <nav className="hidden md:flex items-center text-sm gap-6 font-medium">
+        <nav className="hidden md:flex items-center gap-6 font-medium">
           <Link href="/" className="hover:text-primary transition-colors">
             Home
           </Link>
