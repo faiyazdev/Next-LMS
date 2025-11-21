@@ -17,6 +17,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { ModeToggle } from "@/components/toggle-mode";
 
 export default function AdminNavbar() {
   return (
@@ -68,6 +69,7 @@ export default function AdminNavbar() {
           <SignedIn>
             <UserButton />
           </SignedIn>
+          <ModeToggle />
         </div>
 
         {/* Mobile Menu */}
@@ -79,8 +81,9 @@ export default function AdminNavbar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-64">
-              <SheetHeader>
+              <SheetHeader className="flex">
                 <SheetTitle>Next LMS</SheetTitle>
+                <ModeToggle />
               </SheetHeader>
 
               <nav className="flex px-4 flex-col gap-4 mt-6 text-lg font-medium">

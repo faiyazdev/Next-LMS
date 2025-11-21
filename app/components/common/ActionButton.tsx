@@ -30,8 +30,12 @@ const ActionButton = ({
   const [isLoading, startTransition] = useTransition();
   function performAction() {
     startTransition(async () => {
-      await action();
-      toast.success("Course deleted successfully");
+      const data = await action();
+      if (data?.error) {
+        toast.error(data?.message);
+      } else {
+        toast.success(data?.message);
+      }
     });
   }
   if (requireAreYouSure) {

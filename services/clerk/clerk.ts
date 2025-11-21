@@ -24,8 +24,9 @@ export const syncClerkUserMetadata = async (
 
 export async function getCurrentUser() {
   const { userId, redirectToSignIn, sessionClaims } = await auth();
+
   return {
-    clerkUserId: userId,
+    clerkUserId: userId!,
     dbId: sessionClaims?.dbId,
     role: sessionClaims?.role,
     redirectToSignIn,
