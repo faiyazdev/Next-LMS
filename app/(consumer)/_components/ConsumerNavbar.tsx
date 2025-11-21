@@ -19,6 +19,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { canAccessAdminPages } from "@/permissions/canAccessAdminPages";
+import { ModeToggle } from "@/components/toggle-mode";
 
 export default function ConsumerNavbar() {
   return (
@@ -67,6 +68,7 @@ export default function ConsumerNavbar() {
           <SignedIn>
             <UserButton />
           </SignedIn>
+          <ModeToggle />
         </div>
 
         {/* Mobile Menu */}
