@@ -28,13 +28,13 @@ export const createSection = async ({
     .insert(CourseSectionTable)
     .values({ name, status, courseId, order })
     .returning();
-
+  if (newSection == null)
+    throw new Error("Failed to create Section, database error");
   revalidateCourseSectionCacheTag({
     courseId,
     courseSectionId: newSection.id,
   });
-  if (newSection == null)
-    throw new Error("Failed to create Section, database error");
+
   return newSection;
 };
 
@@ -50,13 +50,13 @@ export const updateSection = async ({
     .set(data)
     .where(eq(CourseSectionTable.id, sectionId))
     .returning();
-
+  if (section == null)
+    throw new Error("Failed to update Section, database error");
   revalidateCourseSectionCacheTag({
     courseId: section.courseId,
     courseSectionId: section.id,
   });
-  if (section == null)
-    throw new Error("Failed to update Section, database error");
+
   return section;
 };
 
@@ -65,12 +65,12 @@ export const deleteSection = async (sectionId: string) => {
     .delete(CourseSectionTable)
     .where(eq(CourseSectionTable.id, sectionId))
     .returning();
-
+  if (section == null)
+    throw new Error("Failed to delete Section, database error");
   revalidateCourseSectionCacheTag({
     courseId: section.courseId,
     courseSectionId: section.id,
   });
-  if (section == null)
-    throw new Error("Failed to update Section, database error");
+
   return section;
 };

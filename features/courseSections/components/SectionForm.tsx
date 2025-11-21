@@ -28,7 +28,7 @@ import { createSection, updateSection } from "../actions/courseSections";
 
 type SectionFormProps = {
   courseId: string;
-  section?: CourseSectionTable;
+  section?: CourseSectionTable & { id: string };
   onSuccess: () => void;
   onError: () => void;
 };
@@ -50,7 +50,7 @@ const SectionForm = ({
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof sectionSchema>) {
     const action = section
-      ? updateSection.bind(null, section.id!)
+      ? updateSection.bind(null, section.id)
       : createSection.bind(null, courseId);
     const data = await action(values);
     if (data?.error) {

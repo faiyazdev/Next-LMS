@@ -31,12 +31,19 @@ export const createSection = async (
       message: "there was an error creating section, invalid",
     };
   }
-  const order = await getNextCourseSectionOrder(courseId);
-  await createSectionDB({ courseId, ...data, order });
-  return {
-    error: false,
-    message: "section created successfully",
-  };
+  try {
+    const order = await getNextCourseSectionOrder(courseId);
+    await createSectionDB({ courseId, ...data, order });
+    return {
+      error: false,
+      message: "section created successfully",
+    };
+  } catch {
+    return {
+      error: true,
+      message: "there was an error creating section, database error",
+    };
+  }
 };
 
 export const updateSection = async (
@@ -56,11 +63,18 @@ export const updateSection = async (
       message: "there was an error updating section, invalid",
     };
   }
-  await updateSectionDB({ sectionId, data });
-  return {
-    error: false,
-    message: "section updated successfully",
-  };
+  try {
+    await updateSectionDB({ sectionId, data });
+    return {
+      error: false,
+      message: "section updated successfully",
+    };
+  } catch {
+    return {
+      error: true,
+      message: "there was an error updating section, database error",
+    };
+  }
 };
 
 export const deleteSection = async (sectionId: string) => {
@@ -70,9 +84,13 @@ export const deleteSection = async (sectionId: string) => {
       message: "there was an error deleting section, you have no access",
     };
   }
-  await deleteSectionDB(sectionId);
-  return {
-    error: false,
-    message: "section deleted successfully",
-  };
+  try {
+    await deleteSectionDB(sectionId);
+    return { error: false, message: "section deleted successfully" };
+  } catch {
+    return {
+      error: true,
+      message: "there was an error deleting section, database error",
+    };
+  }
 };
