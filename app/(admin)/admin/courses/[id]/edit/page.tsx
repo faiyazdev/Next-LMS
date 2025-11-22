@@ -7,8 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CourseForm } from "@/features/courses/_components/CourseForm";
 import SectionFormDialog from "@/features/courseSections/components/SectionFormDialog";
-import { PlusIcon } from "lucide-react";
+import { EyeClosedIcon, PlusIcon } from "lucide-react";
 import SortableSectionList from "@/features/courseSections/components/SortableSectionList";
+import { cn } from "@/lib/utils";
 async function CourseEditPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const course = await getCourseById(id);
@@ -41,6 +42,38 @@ async function CourseEditPage({ params }: { params: Promise<{ id: string }> }) {
                 />
               </CardContent>
             </Card>
+            <hr className="my-4" />
+            <div className="grid gap-5">
+              {course.sections.map((section) => {
+                return (
+                  <Card className="" key={section.id}>
+                    <CardHeader>
+                      <div className="flex justify-between items-center gap-4">
+                        <CardTitle>
+                          <div
+                            className={cn(
+                              "capitalize flex gap-3",
+                              section.status === "private"
+                                ? "text-gray-50/25"
+                                : null
+                            )}
+                          >
+                            {section.status === "private" && <EyeClosedIcon />}
+                            {section.name}
+                          </div>
+                        </CardTitle>
+                        <SectionFormDialog courseId={course.id}>
+                          <Button variant={"outline"}>
+                            <PlusIcon /> New Lesson
+                          </Button>
+                        </SectionFormDialog>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="mt-3 grid grid-cols-1 gap-y-10"></CardContent>
+                  </Card>
+                );
+              })}
+            </div>
           </TabsContent>
           <TabsContent value="details">
             <Card>
