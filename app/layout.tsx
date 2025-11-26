@@ -5,6 +5,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,21 +32,23 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ClerkProvider
-          appearance={{
-            theme: dark,
-          }}
-        >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem
-            disableTransitionOnChange
+        <Suspense fallback={<div>Loading app...</div>}>
+          <ClerkProvider
+            appearance={{
+              theme: dark,
+            }}
           >
-            <main>{children}</main>
-          </ThemeProvider>
-          <Toaster />
-        </ClerkProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="light"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <main>{children}</main>
+            </ThemeProvider>
+            <Toaster />
+          </ClerkProvider>
+        </Suspense>
       </body>
     </html>
   );

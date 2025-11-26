@@ -6,25 +6,34 @@ import {
   DialogContent,
   DialogTitle,
 } from "@/components/ui/dialog";
+import type { LessonStatus } from "@/drizzle/schema";
 import { ReactNode, useState } from "react";
-import SectionForm from "./SectionForm";
-import type { CourseSectionStatus } from "@/drizzle/schema";
+import LessonForm from "./LessonForm";
 
-type SectionFormDialogProps = {
-  courseId: string;
-  section?: {
+type LessonFormDialogProps = {
+  defaultSectionId: string;
+  lesson?: {
     id: string;
     name: string;
-    status: CourseSectionStatus;
+    youtubeVideoId: string;
+    status: LessonStatus;
+    description?: string | null;
+    sectionId: string;
   };
+
+  sections: {
+    id: string;
+    name: string;
+  }[];
   children: ReactNode;
 };
 
-const SectionFormDialog = ({
-  courseId,
-  section,
+const LessonFormDialog = ({
+  defaultSectionId,
+  sections,
+  lesson,
   children,
-}: SectionFormDialogProps) => {
+}: LessonFormDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -32,13 +41,14 @@ const SectionFormDialog = ({
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{section ? "Edit Section" : "New Section"}</DialogTitle>
+          <DialogTitle>{lesson ? "Edit Lesson" : "New Lesson"}</DialogTitle>
         </DialogHeader>
 
         <div className="mt-3">
-          <SectionForm
-            section={section}
-            courseId={courseId}
+          <LessonForm
+            lesson={lesson}
+            sections={sections}
+            defaultSectionId={defaultSectionId}
             onError={() => setIsOpen(false)}
             onSuccess={() => setIsOpen(false)}
           />
@@ -48,4 +58,4 @@ const SectionFormDialog = ({
   );
 };
 
-export default SectionFormDialog;
+export default LessonFormDialog;

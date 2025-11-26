@@ -7,7 +7,11 @@ export default defineConfig({
   schema: "./drizzle/schema.ts",
   dialect: "postgresql",
   dbCredentials: {
-    url: env.DATABASE_URL,
+    database: env.DB_NAME,
+    user: env.DB_USER,
+    password: env.DB_PASSWORD,
+    host: env.DB_HOST,
+    ssl: false,
   },
   strict: true,
   verbose: true,

@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 export default function AuthLayout({
   children,
 }: Readonly<{
@@ -5,7 +7,9 @@ export default function AuthLayout({
 }>) {
   return (
     <div className="min-h-screen flex justify-center items-center">
-      {children}
+      <Suspense fallback={<div>Loading auth...</div>}>
+        {children}
+      </Suspense>
     </div>
   );
 }
