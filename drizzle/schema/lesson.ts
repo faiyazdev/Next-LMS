@@ -21,7 +21,7 @@ export const LessonTable = pgTable("lessons", {
   createdAt,
   updatedAt,
 });
-
+export type LessonTable = typeof LessonTable.$inferInsert;
 export const LessonRelationships = relations(LessonTable, ({ one, many }) => ({
   section: one(CourseSectionTable, {
     fields: [LessonTable.sectionId],
