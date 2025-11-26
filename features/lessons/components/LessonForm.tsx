@@ -80,7 +80,6 @@ const LessonForm = ({
     try {
       const data = await action(values);
       if (data?.error) {
-        onError();
         return toast.error(data?.message ?? "Something went wrong");
       }
       onSuccess();

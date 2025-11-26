@@ -52,6 +52,7 @@ export const updateLessonOrders = async (lessonIds: string[]) => {
 export async function insertLesson(data: z.infer<typeof lessonSchema>) {
   const getNextLessonOrder = await db.query.LessonTable.findFirst({
     columns: { order: true },
+    where: eq(LessonTable.sectionId, data.sectionId),
     orderBy: desc(LessonTable.order),
   });
 
@@ -62,7 +63,7 @@ export async function insertLesson(data: z.infer<typeof lessonSchema>) {
     .values({ ...data, order: nextOrder })
     .returning();
 
-  if (!insertLesson) throw new Error("failed to insert lesson");
+  if (!insertedLesson) throw new Error("failed to insert lesson");
 
   const section = await db.query.CourseSectionTable.findFirst({
     where: eq(CourseSectionTable.id, insertedLesson.sectionId),
@@ -79,16 +80,37 @@ export async function insertLesson(data: z.infer<typeof lessonSchema>) {
 
 export async function updateLesson(
   lessonId: string,
-  data: z.infer<typeof lessonSchema>
+  data: Partial<typeof LessonTable.$inferInsert>
 ) {
   const [lesson, courseId] = await db.transaction(async (tx) => {
+    const currentLesson = await tx.query.LessonTable.findFirst({
+      where: eq(LessonTable.id, lessonId),
+      columns: {
+        sectionId: true,
+      },
+    });
+    if (!currentLesson) return tx.rollback();
+    if (
+      data.sectionId != null &&
+      data.sectionId !== currentLesson?.sectionId &&
+      data.order == null
+    ) {
+      const nextLessonOrder = await tx.query.LessonTable.findFirst({
+        where: eq(LessonTable.sectionId, data.sectionId),
+        orderBy: desc(LessonTable.order),
+        columns: {
+          order: true,
+        },
+      });
+      data.order = ((nextLessonOrder?.order ?? 0) || 0) + 1;
+    }
     const [updatedLesson] = await tx
       .update(LessonTable)
       .set(data)
       .where(eq(LessonTable.id, lessonId))
       .returning();
 
-    if (!updatedLesson) throw new Error("failed to insert lesson");
+    if (!updatedLesson) throw new Error("failed to update lesson");
 
     const section = await tx.query.CourseSectionTable.findFirst({
       where: eq(CourseSectionTable.id, updatedLesson.sectionId),
@@ -111,14 +133,14 @@ export async function deleteLesson(lessonId: string) {
       .where(eq(LessonTable.id, lessonId))
       .returning();
 
-    if (!deletedLesson) throw new Error("failed to insert lesson");
+    if (!deletedLesson) throw new Error("failed to delete lesson");
 
     const section = await tx.query.CourseSectionTable.findFirst({
       where: eq(CourseSectionTable.id, deletedLesson.sectionId),
     });
 
     if (!section)
-      throw new Error("failed to fetch section, failed to update lesson");
+      throw new Error("failed to fetch section, failed to delete lesson");
     return [deletedLesson, section.courseId];
   });
   revalidateLessonCacheTag({

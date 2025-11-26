@@ -37,12 +37,7 @@ type SectionFormProps = {
   onError: () => void;
 };
 
-const SectionForm = ({
-  courseId,
-  section,
-  onSuccess,
-  onError,
-}: SectionFormProps) => {
+const SectionForm = ({ courseId, section, onSuccess }: SectionFormProps) => {
   const form = useForm<z.infer<typeof sectionSchema>>({
     resolver: zodResolver(sectionSchema),
     defaultValues: {
@@ -58,7 +53,6 @@ const SectionForm = ({
       : createSection.bind(null, courseId);
     const data = await action(values);
     if (data?.error) {
-      onError();
       return toast.error(data?.message);
     }
     onSuccess();
