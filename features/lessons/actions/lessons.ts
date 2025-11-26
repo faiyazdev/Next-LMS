@@ -18,7 +18,8 @@ export const createLesson = async (
   unsafeData: z.infer<typeof lessonSchema>
 ) => {
   const { success, data } = lessonSchema.safeParse(unsafeData);
-  if (!success || !canCreateLesson((await getCurrentUser()).role!))
+  const user = await getCurrentUser();
+  if (!success || !user.role || !canCreateLesson(user.role))
     return {
       error: true,
       message: "Lesson failed to create or have no access, error",
@@ -43,7 +44,8 @@ export const updateLesson = async (
   unsafeData: z.infer<typeof lessonSchema>
 ) => {
   const { success, data } = lessonSchema.safeParse(unsafeData);
-  if (!success || !canUpdateLesson((await getCurrentUser()).role!))
+  const user = await getCurrentUser();
+  if (!success || !user.role || !canUpdateLesson(user.role))
     return {
       error: true,
       message: "Lesson failed to update or have no access, error",
@@ -62,11 +64,13 @@ export const updateLesson = async (
   };
 };
 export const deleteLesson = async (lessonId: string) => {
-  if (!canDeleteLesson((await getCurrentUser()).role!))
+  const user = await getCurrentUser();
+  if (!user.role || !canDeleteLesson(user.role))
     return {
       error: true,
-      message: "you have no access to delete, error",
+      message: "Lesson failed to delete or have no access, error",
     };
+
   try {
     await deleteLessonDb(lessonId);
   } catch {
@@ -82,9 +86,22 @@ export const deleteLesson = async (lessonId: string) => {
 };
 
 export const updateLessonOrders = async (lessonIds: string[]) => {
-  await updateLessonOrdersDb(lessonIds);
+  const user = await getCurrentUser();
+  if (!user.role || !canCreateLesson(user.role))
+    return {
+      error: true,
+      message: "Lesson orders failed to update or have no access, error",
+    };
+  try {
+    await updateLessonOrdersDb(lessonIds);
+  } catch {
+    return {
+      error: true,
+      message: "Failed to update lesson order",
+    };
+  }
   return {
-    error: true,
-    message: "sjf",
+    error: false,
+    message: "Lesson order updated successfully",
   };
 };
