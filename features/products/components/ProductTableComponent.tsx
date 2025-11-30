@@ -24,7 +24,7 @@ type ProductTableProps = {
     description: string;
     status: ProductStatus;
     imagePath: string;
-    priceInDollers: number;
+    priceInDollars: number;
     courseCount: number;
     customerCount: number;
   }[];
@@ -67,7 +67,7 @@ const ProductTableComponent = ({ products }: ProductTableProps) => {
                         singular: "course",
                         plural: "courses",
                       })}{" "}
-                      . {formatNumber(product.priceInDollers)}
+                      . {formatNumber(product.priceInDollars)}
                     </span>
                   </div>
                 </div>

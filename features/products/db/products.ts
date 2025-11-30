@@ -26,7 +26,7 @@ export async function getAllProducts() {
       description: ProductTable.description,
       status: ProductTable.status,
       imagePath: ProductTable.imagePath,
-      priceInDollers: ProductTable.priceInDollars,
+      priceInDollars: ProductTable.priceInDollars,
       courseCount: countDistinct(CourseProductTable.courseId),
       customerCount: countDistinct(PurchaseTable.userId),
     })
