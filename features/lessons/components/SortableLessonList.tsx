@@ -2,7 +2,7 @@
 
 import ActionButton from "@/app/components/common/ActionButton";
 import { SortableItem } from "@/components/SortableItem";
-import { SoratableList } from "@/components/SortableList";
+import { SortableList } from "@/components/SortableList";
 import { Button } from "@/components/ui/button";
 import { LessonStatus } from "@/drizzle/schema";
 import { cn } from "@/lib/utils";
@@ -31,7 +31,7 @@ const SortableLessonList = ({
   }[];
 }) => {
   return (
-    <SoratableList items={lessons} onOrderChange={updateLessonOrders}>
+    <SortableList items={lessons} onOrderChange={updateLessonOrders}>
       {(lessons) =>
         lessons.map((lesson) => {
           return (
@@ -68,7 +68,7 @@ const SortableLessonList = ({
           );
         })
       }
-    </SoratableList>
+    </SortableList>
   );
 };
 
