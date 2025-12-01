@@ -9,6 +9,8 @@ export const env = createEnv({
     DB_HOST: z.string().min(1),
     CLERK_SECRET_KEY: z.string().min(1),
     CLERK_WEBHOOK_SIGNING_SECRET: z.string().min(1),
+    ARCJET_KEY: z.string().min(1),
+    TEST_IP_ADDRESS: z.string().min(1).optional(),
   },
 
   runtimeEnv: {
@@ -18,5 +20,7 @@ export const env = createEnv({
     DB_HOST: process.env.DB_HOST,
     DB_PASSWORD: process.env.DB_PASSWORD,
     DB_USER: process.env.DB_USER,
+    ARCJET_KEY: process.env.ARCJET_KEY,
+    TEST_IP_ADDRESS: process.env.TEST_IP_ADDRESS,
   },
 });
