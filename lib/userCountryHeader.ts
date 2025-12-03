@@ -1,3 +1,6 @@
+import { pppCoupons } from "@/data/pppCoupons";
+import { headers } from "next/headers";
+
 const COUNTRY_HEADER_KEY = "x-user-country";
 export function setUserCountryHeader(
   headers: Headers,
@@ -7,4 +10,21 @@ export function setUserCountryHeader(
     headers.delete(COUNTRY_HEADER_KEY);
   }
   headers.set(COUNTRY_HEADER_KEY, country ?? "");
+}
+
+export async function getUserCountry() {
+  const head = await headers();
+  return head.get(COUNTRY_HEADER_KEY);
+}
+export async function getUserCoupon() {
+  const country = await getUserCountry();
+  if (country == null) return;
+  const coupon = pppCoupons.find((coupon) =>
+    coupon.countryCodes.includes(country)
+  );
+  if (!coupon) return;
+  return {
+    stripeCouponId: coupon.stripeCouponId,
+    discountPercentage: coupon.discountPercentage,
+  };
 }
