@@ -4,17 +4,38 @@ import {
   ProductTable,
   PurchaseTable,
 } from "@/drizzle/schema";
-import { countDistinct, eq } from "drizzle-orm";
+import { and, countDistinct, eq, isNull } from "drizzle-orm";
 import { cacheTag } from "next/cache";
 import {
   getProductGlobalTag,
   revalidateProductCacheTag,
 } from "./cache/products";
+import { getPurchaseUserTag } from "@/features/purchases/db/cache";
 
 type ProductInsertForCreate = Omit<
   typeof ProductTable.$inferInsert,
   "id" | "createdAt" | "updatedAt"
 >;
+
+export async function checkIsUserOwnProduct({
+  productId,
+  userId,
+}: {
+  productId: string;
+  userId: string;
+}) {
+  "use cache";
+  cacheTag(getPurchaseUserTag(userId));
+  const existingPurchase = await db.query.PurchaseTable.findFirst({
+    where: and(
+      eq(PurchaseTable.productId, productId),
+      eq(PurchaseTable.userId, userId),
+      isNull(PurchaseTable.refundedAt)
+    ),
+  });
+
+  return existingPurchase != null;
+}
 
 export async function getAllProducts() {
   "use cache";

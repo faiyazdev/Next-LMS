@@ -11,6 +11,10 @@ export const env = createEnv({
     CLERK_WEBHOOK_SIGNING_SECRET: z.string().min(1),
     ARCJET_KEY: z.string().min(1),
     TEST_IP_ADDRESS: z.string().min(1).optional(),
+    STRIPE_PPP_50_COUPON_ID: z.string().min(1),
+    STRIPE_PPP_40_COUPON_ID: z.string().min(1),
+    STRIPE_PPP_30_COUPON_ID: z.string().min(1),
+    STRIPE_PPP_20_COUPON_ID: z.string().min(1),
   },
 
   runtimeEnv: {
@@ -22,5 +26,9 @@ export const env = createEnv({
     DB_USER: process.env.DB_USER,
     ARCJET_KEY: process.env.ARCJET_KEY,
     TEST_IP_ADDRESS: process.env.TEST_IP_ADDRESS,
+    STRIPE_PPP_50_COUPON_ID: process.env.STRIPE_PPP_50_COUPON_ID,
+    STRIPE_PPP_40_COUPON_ID: process.env.STRIPE_PPP_40_COUPON_ID,
+    STRIPE_PPP_30_COUPON_ID: process.env.STRIPE_PPP_30_COUPON_ID,
+    STRIPE_PPP_20_COUPON_ID: process.env.STRIPE_PPP_20_COUPON_ID,
   },
 });
